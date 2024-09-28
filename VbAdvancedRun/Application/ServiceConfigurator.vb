@@ -1,5 +1,4 @@
 ﻿Namespace Application
-
     ''' <summary>
     ''' Configures the services for dependency injection.
     ''' </summary>
@@ -10,7 +9,7 @@
     ''' which can be used to resolve services at runtime.
     ''' </remarks>
     Friend Class ServiceConfigurator
-
+        Implements IServiceConfigurator
         ''' <summary>
         ''' Registers all services required by the application.
         ''' </summary>
@@ -61,7 +60,6 @@
             RegisterResourceExtractorServices(services)
             RegisterAppRunner(services)
         End Sub
-
         ''' <summary>
         ''' Registers error handling services.
         ''' </summary>
@@ -113,7 +111,6 @@
             }
             AddServices(services, errorHandlingServices)
         End Sub
-
         ''' <summary>
         ''' Registers user input services.
         ''' </summary>
@@ -159,7 +156,6 @@
                     }
             AddServices(services, userInputServices)
         End Sub
-
         ''' <summary>
         ''' Registers program path validation services.
         ''' </summary>
@@ -190,7 +186,6 @@
                     }
             AddServices(services, programPathValidatorServices)
         End Sub
-
         ''' <summary>
         ''' Registers directory services.
         ''' </summary>
@@ -224,7 +219,6 @@
                     }
             AddServices(services, directoryServices)
         End Sub
-
         ''' <summary>
         ''' Registers resource extractor services.
         ''' </summary>
@@ -266,7 +260,6 @@
                     }
             AddServices(services, resourceExtractorServices)
         End Sub
-
         ''' <summary>
         ''' Registers the <see cref="AppRunner"/> service.
         ''' </summary>
@@ -292,7 +285,6 @@
                     }
             AddServices(services, appRunnerServices)
         End Sub
-
         ''' <summary>
         ''' Adds the specified services to the service collection.
         ''' </summary>
@@ -316,7 +308,6 @@
                 services.AddTransient(kvp.Key, kvp.Value)
             Next
         End Sub
-
         ''' <summary>
         ''' Configures the services for dependency injection.
         ''' </summary>
@@ -332,7 +323,7 @@
         ''' The returned <see cref="IServiceProvider"/> is the main interface for accessing the configured services and is used 
         ''' throughout the application to resolve dependencies.
         ''' </remarks>
-        Friend Shared Function ConfigureServices() As IServiceProvider
+        Public Function ConfigureServices() As IServiceProvider Implements IServiceConfigurator.ConfigureServices
             Dim services As New ServiceCollection()
             RegisterServices(services)
             Return services.BuildServiceProvider()

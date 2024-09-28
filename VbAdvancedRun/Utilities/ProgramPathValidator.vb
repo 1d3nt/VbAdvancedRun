@@ -53,16 +53,48 @@
         ''' the user is prompted to provide a new path until a valid one is entered.
         ''' </remarks>
         ''' <seealso cref="IProgramPathValidator.GetValidProgramPath"/>
-        Public Function GetValidProgramPath() As String Implements IProgramPathValidator.GetValidProgramPath
+        Friend Function GetValidProgramPath() As String Implements IProgramPathValidator.GetValidProgramPath
             Dim programPath As String
             Do
-                _prompter.Prompt("Please enter the path of the program you would like to launch:")
-                programPath = _inputReader.ReadInput()
-                If Not File.Exists(programPath) Then
-                    _prompter.Prompt($"The path '{programPath}' does not exist. Please provide a valid path.")
-                End If
-            Loop Until File.Exists(programPath)
+                programPath = PromptForProgramPath()
+            Loop Until IsValidPath(programPath)
+            StoreProgramPath(programPath)
             Return programPath
         End Function
+
+        ''' <summary>
+        ''' Prompts the user to enter the program path.
+        ''' </summary>
+        ''' <returns>
+        ''' The program path entered by the user.
+        ''' </returns>
+        Private Function PromptForProgramPath() As String
+            _prompter.Prompt("Please enter the path of the program you would like to launch:")
+            Return _inputReader.ReadInput()
+        End Function
+
+        ''' <summary>
+        ''' Checks if the provided path is valid.
+        ''' </summary>
+        ''' <param name="path">The path to validate.</param>
+        ''' <returns>
+        ''' <c>True</c> if the path exists; otherwise, <c>False</c>.
+        ''' </returns>
+        Private Function IsValidPath(path As String) As Boolean
+            If File.Exists(path) Then
+                Return True
+            Else
+                _prompter.Prompt($"The path '{path}' does not exist. Please provide a valid path.")
+                Return False
+            End If
+        End Function
+
+        ''' <summary>
+        ''' Stores the validated program path in the <see cref="PathStorage"/> singleton.
+        ''' </summary>
+        ''' <param name="path">The validated program path to store.</param>
+        Private Shared Sub StoreProgramPath(path As String)
+            PathStorage.Instance.ProgramPath = path
+        End Sub
     End Class
 End Namespace

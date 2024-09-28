@@ -52,14 +52,47 @@ Module Program
     ''' </remarks>
     <SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification:="Standard Main method parameter signature.")>
     Sub Main(args As String())
-        Dim serviceProvider As IServiceProvider = ServiceConfigurator.ConfigureServices()
+        Dim serviceProvider As IServiceProvider = ConfigureServices()
         Dim userPrompter = serviceProvider.GetService(Of IUserPrompter)()
-        Dim userInputReader = serviceProvider.GetService(Of IUserInputReader)
+        Dim userInputReader = serviceProvider.GetService(Of IUserInputReader)()
         Dim appRunner = serviceProvider.GetService(Of IAppRunner)()
         If appRunner Is Nothing Then
-            userPrompter.Prompt("Failed to resolve IAppRunner.")
-            userInputReader.ReadInput()
+            HandleAppRunnerResolutionFailure(serviceProvider, userPrompter, userInputReader)
         End If
+        RunApplication(appRunner, userPrompter)
+    End Sub
+
+    ''' <summary>
+    ''' Configures services for dependency injection.
+    ''' </summary>
+    ''' <returns>
+    ''' An instance of <see cref="IServiceProvider"/> configured with the necessary services.
+    ''' </returns>
+    Private Function ConfigureServices() As IServiceProvider
+        Dim serviceConfigurator As New ServiceConfigurator()
+        Return serviceConfigurator.ConfigureServices()
+    End Function
+
+    ''' <summary>
+    ''' Handles the failure to resolve the <see cref="IAppRunner"/> instance.
+    ''' Prompts the user with an error message, reads input, and exits the application with an error code.
+    ''' </summary>
+    ''' <param name="serviceProvider">The service provider used to resolve dependencies.</param>
+    ''' <param name="userPrompter">The user prompter used to display messages to the user.</param>
+    ''' <param name="userInputReader">The user input reader used to read user input.</param>
+    Private Sub HandleAppRunnerResolutionFailure(serviceProvider As IServiceProvider, userPrompter As IUserPrompter, userInputReader As IUserInputReader)
+        userPrompter.Prompt("Failed to resolve IAppRunner.")
+        userInputReader.ReadInput()
+        Dim exitUtility = serviceProvider.GetService(Of IExitUtility)()
+        exitUtility.ExitWithError()
+    End Sub
+
+    ''' <summary>
+    ''' Runs the application and handles any exceptions that occur during execution.
+    ''' </summary>
+    ''' <param name="appRunner">The application runner used to run the application.</param>
+    ''' <param name="userPrompter">The user prompter used to display messages to the user.</param>
+    Private Sub RunApplication(appRunner As IAppRunner, userPrompter As IUserPrompter)
         Try
             appRunner.RunAsync().GetAwaiter().GetResult()
         Catch ex As Exception

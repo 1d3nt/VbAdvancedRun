@@ -9,9 +9,9 @@
     Public Interface IExtractorService
 
         ''' <summary>
-        ''' Extracts the resource and the 7z archive to the service directory asynchronously.
+        ''' Extracts the resource and the 7z archive to the service directory asynchronously with messaging and error handling.
         ''' </summary>
-        ''' <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating success or failure.</returns>
-        Function ExtractAllAsync() As Task(Of Boolean)
+        ''' <returns>A task that represents the asynchronous operation.</returns>
+        Function ExtractAllWithMessagingAsync() As Task
     End Interface
 End Namespace

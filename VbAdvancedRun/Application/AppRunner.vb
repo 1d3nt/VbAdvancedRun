@@ -92,8 +92,7 @@
         Friend Async Function RunAsync() As Task Implements IAppRunner.RunAsync
             Dim programPath = GetValidProgramPath()
             PromptUser(programPath)
-            CreateServiceDirectory()
-            Await ExtractAllAsync()
+            Await EnsureDirectoriesAndFilesExistAsync()
             ReadUserInput()
         End Function
 
@@ -114,27 +113,12 @@
         End Sub
 
         ''' <summary>
-        ''' Creates the service directory.
+        ''' Ensures that the service directory and necessary files exist.
+        ''' This method delegates the directory creation to the <see cref="_appDataManager"/> and uses the <see cref="_extractorService"/> to extract resources and archives.
         ''' </summary>
-        Private Sub CreateServiceDirectory()
+        Friend Async Function EnsureDirectoriesAndFilesExistAsync() As Task
             _appDataManager.CreateServiceDirectory()
-        End Sub
-
-        ''' <summary>
-        ''' Extracts all asynchronously.
-        ''' </summary>
-        Private Async Function ExtractAllAsync() As Task
-            Const errorCode = 1
-            Try
-                Dim success As Boolean = Await _extractorService.ExtractAllAsync()
-                If Not success Then
-                    _userPrompter.Prompt("Extraction failed without any errors.")
-                    _userInputReader.ReadInput()
-                    Environment.Exit(errorCode)
-                End If
-            Catch ex As Exception
-                _userPrompter.Prompt($"An error occurred during extraction: {ex.Message}")
-            End Try
+            Await _extractorService.ExtractAllWithMessagingAsync()
         End Function
 
         ''' <summary>

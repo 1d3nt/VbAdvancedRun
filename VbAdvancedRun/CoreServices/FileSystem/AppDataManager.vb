@@ -45,6 +45,14 @@
         End Function
 
         ''' <summary>
+        ''' Gets the full path to the app settings file.
+        ''' </summary>
+        ''' <returns>The full path to the app settings file.</returns>
+        Friend Function GetAppSettingsFilePath() As String Implements IAppDataManager.GetAppSettingsFilePath
+            Return Path.Combine(GetServiceDirectoryPath(), "appsettings.json")
+        End Function
+
+        ''' <summary>
         ''' Builds a path to the specified directory within the 'VbAdvancedRun' folder on the main drive.
         ''' </summary>
         ''' <param name="directoryName">The name of the directory (e.g., 'Service').</param>
