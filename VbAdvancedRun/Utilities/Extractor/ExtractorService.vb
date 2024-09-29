@@ -32,6 +32,11 @@
         Private ReadOnly _serviceProvider As IServiceProvider
 
         ''' <summary>
+        ''' The failure handler used to handle failures by prompting the user and exiting the application with an error.
+        ''' </summary>
+        Private ReadOnly _failureHandler As IFailureHandler
+
+        ''' <summary>
         ''' Initializes a new instance of the <see cref="ExtractorService"/> class.
         ''' </summary>
         ''' <param name="resourceExtractor">The resource extractor service.</param>
@@ -39,12 +44,14 @@
         ''' <param name="userPrompter">The user prompter service.</param>
         ''' <param name="userInputReader">The user input reader service.</param>
         ''' <param name="serviceProvider">The service provider for resolving services.</param>
-        Public Sub New(resourceExtractor As IResourceExtractor, archiveExtractor As IArchiveExtractor, userPrompter As IUserPrompter, userInputReader As IUserInputReader, serviceProvider As IServiceProvider)
+        ''' <param name="failureHandler">The failure handler service.</param>
+        Public Sub New(resourceExtractor As IResourceExtractor, archiveExtractor As IArchiveExtractor, userPrompter As IUserPrompter, userInputReader As IUserInputReader, serviceProvider As IServiceProvider, failureHandler As IFailureHandler)
             _resourceExtractor = resourceExtractor
             _archiveExtractor = archiveExtractor
             _userPrompter = userPrompter
             _userInputReader = userInputReader
             _serviceProvider = serviceProvider
+            _failureHandler = failureHandler
         End Sub
 
         ''' <summary>
@@ -65,17 +72,18 @@
         ''' Extracts the resource and the 7z archive to the service directory asynchronously with messaging and error handling.
         ''' </summary>
         ''' <returns>A task that represents the asynchronous operation.</returns>
+        ''' <remarks>
+        ''' If the extraction fails or an exception occurs, the method will prompt the user and exit the application gracefully by calling
+        ''' <see cref="_failureHandler"/> to manage the error messaging and exit logic.
+        ''' </remarks>
         Friend Async Function ExtractAllWithMessagingAsync() As Task Implements IExtractorService.ExtractAllWithMessagingAsync
             Try
                 Dim success As Boolean = Await ExtractAllAsync()
                 If Not success Then
-                    _userPrompter.Prompt("Extraction failed without any errors.")
-                    _userInputReader.ReadInput()
-                    Dim exitUtility = _serviceProvider.GetService(Of IExitUtility)()
-                    exitUtility.ExitWithError()
+                    _failureHandler.HandleFailure("Extraction was not successful, but no specific errors were reported.")
                 End If
             Catch ex As Exception
-                _userPrompter.Prompt($"An error occurred during extraction: {ex.Message}")
+                _failureHandler.HandleFailure("An error occurred during extraction.")
             End Try
         End Function
 

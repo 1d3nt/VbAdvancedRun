@@ -1,4 +1,5 @@
 ﻿Namespace Application
+
     ''' <summary>
     ''' Configures the services for dependency injection.
     ''' </summary>
@@ -10,6 +11,7 @@
     ''' </remarks>
     Friend Class ServiceConfigurator
         Implements IServiceConfigurator
+
         ''' <summary>
         ''' Registers all services required by the application.
         ''' </summary>
@@ -50,6 +52,11 @@
         '''       <see cref="RegisterAppRunner"/> - Registers the application runner service, responsible for executing the core logic of the application.
         '''     </description>
         '''   </item>
+        '''   <item>
+        '''     <description>
+        '''       <see cref="RegisterSettingsServices"/> - Registers services for reading and writing app settings.
+        '''     </description>
+        '''   </item>
         ''' </list>
         ''' </remarks>
         Private Shared Sub RegisterServices(services As IServiceCollection)
@@ -59,7 +66,9 @@
             RegisterDirectoryServices(services)
             RegisterResourceExtractorServices(services)
             RegisterAppRunner(services)
+            RegisterSettingsServices(services)
         End Sub
+
         ''' <summary>
         ''' Registers error handling services.
         ''' </summary>
@@ -104,13 +113,15 @@
         ''' <seealso cref="ExitUtility"/>
         Private Shared Sub RegisterErrorHandlingServices(services As IServiceCollection)
             Dim errorHandlingServices As New Dictionary(Of Type, Type) From {
-                {GetType(IWin32ErrorHelper), GetType(Win32ErrorHelper)},
-                {GetType(IWin32ErrorUtility), GetType(Win32ErrorUtility)},
-                {GetType(IErrorHandlingService), GetType(ErrorHandlingService)},
-                {GetType(IExitUtility), GetType(ExitUtility)}
-            }
+                        {GetType(IWin32ErrorHelper), GetType(Win32ErrorHelper)},
+                        {GetType(IWin32ErrorUtility), GetType(Win32ErrorUtility)},
+                        {GetType(IErrorHandlingService), GetType(ErrorHandlingService)},
+                        {GetType(IExitUtility), GetType(ExitUtility)},
+                        {GetType(IFailureHandler), GetType(FailureHandler)} ' Register the FailureHandler
+                    }
             AddServices(services, errorHandlingServices)
         End Sub
+
         ''' <summary>
         ''' Registers user input services.
         ''' </summary>
@@ -156,6 +167,7 @@
                     }
             AddServices(services, userInputServices)
         End Sub
+
         ''' <summary>
         ''' Registers program path validation services.
         ''' </summary>
@@ -186,6 +198,7 @@
                     }
             AddServices(services, programPathValidatorServices)
         End Sub
+
         ''' <summary>
         ''' Registers directory services.
         ''' </summary>
@@ -219,6 +232,7 @@
                     }
             AddServices(services, directoryServices)
         End Sub
+
         ''' <summary>
         ''' Registers resource extractor services.
         ''' </summary>
@@ -260,6 +274,7 @@
                     }
             AddServices(services, resourceExtractorServices)
         End Sub
+
         ''' <summary>
         ''' Registers the <see cref="AppRunner"/> service.
         ''' </summary>
@@ -285,6 +300,50 @@
                     }
             AddServices(services, appRunnerServices)
         End Sub
+
+        ''' <summary>
+        ''' Registers settings services.
+        ''' </summary>
+        ''' <param name="services">
+        ''' The service collection to which the settings services are added. This instance of <see cref="IServiceCollection"/>
+        ''' is used to register services and their implementations for dependency injection.
+        ''' </param>
+        ''' <remarks>
+        ''' This method registers the following settings services:
+        ''' <list type="bullet">
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IAppSettingsWriter"/> is implemented by <see cref="AppSettingsWriter"/>. This service handles writing settings to the app settings file.
+        '''     </description>
+        '''   </item>
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IAppSettingsReader"/> is implemented by <see cref="AppSettingsReader"/>. This service handles reading settings from the app settings file.
+        '''     </description>
+        '''   </item>
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IAppSettingsManager"/> is implemented by <see cref="AppSettingsManager"/>. This service manages application settings, including reading and writing.
+        '''     </description>
+        '''   </item>
+        ''' </list>
+        ''' </remarks>
+        ''' <seealso cref="IAppSettingsWriter"/>
+        ''' <seealso cref="AppSettingsWriter"/>
+        ''' <seealso cref="IAppSettingsReader"/>
+        ''' <seealso cref="AppSettingsReader"/>
+        ''' <seealso cref="IAppSettingsManager"/>
+        ''' <seealso cref="AppSettingsManager"/>
+        Private Shared Sub RegisterSettingsServices(services As IServiceCollection)
+            Dim settingsServices As New Dictionary(Of Type, Type) From {
+                        {GetType(IAppSettingsWriter), GetType(AppSettingsWriter)},
+                        {GetType(IAppSettingsReader), GetType(AppSettingsReader)},
+                        {GetType(IAppSettingsManager), GetType(AppSettingsManager)}
+                    }
+            AddServices(services, settingsServices)
+        End Sub
+
+
         ''' <summary>
         ''' Adds the specified services to the service collection.
         ''' </summary>
@@ -308,6 +367,7 @@
                 services.AddTransient(kvp.Key, kvp.Value)
             Next
         End Sub
+
         ''' <summary>
         ''' Configures the services for dependency injection.
         ''' </summary>

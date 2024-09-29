@@ -4,9 +4,13 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>VbAdvancedRun</RootNamespace>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
-    <ImportedNamespaces>CoreServices.Configuration.Interfaces=False,JetBrains.Annotations=False,Microsoft.Extensions.DependencyInjection=False,Microsoft.Extensions.DependencyInjection.Extensions=False,Newtonsoft.Json=False,Newtonsoft.Json.Serialization=False,System.Diagnostics.CodeAnalysis=False,System.IO=False,System.Reflection=False,System.Runtime.InteropServices=False,System.Runtime.Versioning=False,VbAdvancedRun.Application=False,VbAdvancedRun.Application.Interfaces=False,VbAdvancedRun.CoreServices.Configuration.Interfaces=False,VbAdvancedRun.CoreServices.FileSystem=False,VbAdvancedRun.CoreServices.FileSystem.Interfaces=False,VbAdvancedRun.CoreServices.WindowsApiInterop.Enums=False,VbAdvancedRun.CoreServices.WindowsApiInterop.Methods=False,VbAdvancedRun.Utilities=False,VbAdvancedRun.Utilities.ErrorHandling=False,VbAdvancedRun.Utilities.ErrorHandling.Interfaces=False,VbAdvancedRun.Utilities.Extractor=False,VbAdvancedRun.Utilities.Extractor.Interfaces=False,VbAdvancedRun.Utilities.Interfaces=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,VbAdvancedRun=True</ImportedNamespaces>
+    <ImportedNamespaces>JetBrains.Annotations=False,Microsoft.Extensions.DependencyInjection=False,Microsoft.Extensions.DependencyInjection.Extensions=False,Newtonsoft.Json=False,Newtonsoft.Json.Serialization=False,System.Diagnostics.CodeAnalysis=False,System.IO=False,System.Reflection=False,System.Runtime.InteropServices=False,System.Runtime.Versioning=False,VbAdvancedRun.Application=False,VbAdvancedRun.Application.Interfaces=False,VbAdvancedRun.CoreServices.Configuration=False,VbAdvancedRun.CoreServices.Configuration.Interfaces=False,VbAdvancedRun.CoreServices.FileSystem=False,VbAdvancedRun.CoreServices.FileSystem.Interfaces=False,VbAdvancedRun.CoreServices.WindowsApiInterop.Enums=False,VbAdvancedRun.CoreServices.WindowsApiInterop.Methods=False,VbAdvancedRun.Utilities=False,VbAdvancedRun.Utilities.ErrorHandling=False,VbAdvancedRun.Utilities.ErrorHandling.Interfaces=False,VbAdvancedRun.Utilities.Extractor=False,VbAdvancedRun.Utilities.Extractor.Interfaces=False,VbAdvancedRun.Utilities.Interfaces=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,VbAdvancedRun=True</ImportedNamespaces>
     <OptionStrict>On</OptionStrict>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\CompiledServices.7z" />
+  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\CompiledServices.7z" />
@@ -19,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Import Include="CoreServices.Configuration.Interfaces" />
     <Import Include="JetBrains.Annotations" />
     <Import Include="Microsoft.Extensions.DependencyInjection" />
     <Import Include="Microsoft.Extensions.DependencyInjection.Extensions" />
@@ -32,6 +35,7 @@
     <Import Include="System.Runtime.Versioning" />
     <Import Include="VbAdvancedRun.Application" />
     <Import Include="VbAdvancedRun.Application.Interfaces" />
+    <Import Include="VbAdvancedRun.CoreServices.Configuration" />
     <Import Include="VbAdvancedRun.CoreServices.Configuration.Interfaces" />
     <Import Include="VbAdvancedRun.CoreServices.FileSystem" />
     <Import Include="VbAdvancedRun.CoreServices.FileSystem.Interfaces" />

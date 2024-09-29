@@ -15,33 +15,36 @@
         ''' The user prompter used for displaying messages to the user.
         ''' </summary>
         Private ReadOnly _userPrompter As IUserPrompter
-
         ''' <summary>
         ''' The user input reader used for reading user input.
         ''' </summary>
         Private ReadOnly _userInputReader As IUserInputReader
-
         ''' <summary>
         ''' The program path validator used for validating program paths.
         ''' </summary>
         Private ReadOnly _programPathValidator As IProgramPathValidator
-
         ''' <summary>
         ''' The app data manager used for managing application data directories.
         ''' </summary>
         Private ReadOnly _appDataManager As IAppDataManager
-
         ''' <summary>
         ''' The service provider used to resolve services.
         ''' </summary>
         Private ReadOnly _serviceProvider As IServiceProvider
-
         ''' <summary>
         ''' The extractor service used for extracting resources and archives.
         ''' </summary>
         Private ReadOnly _extractorService As IExtractorService
+        ''' <summary>
+        ''' The app settings manager used to manage application settings.
+        ''' </summary>
+        Private ReadOnly _appSettingsManager As IAppSettingsManager
 
-        ''' <see cref="AppRunner"/>
+        ''' <summary>
+        ''' The failure handler used to handle failures by prompting the user and exiting the application with an error.
+        ''' </summary>
+        Private ReadOnly _failureHandler As IFailureHandler
+
         ''' <summary>
         ''' Initializes a new instance of the <see cref="AppRunner"/> class.
         ''' </summary>
@@ -63,18 +66,26 @@
         ''' <param name="extractorService">
         ''' An instance of <see cref="IExtractorService"/> used to extract resources and archives.
         ''' </param>
+        ''' <param name="appSettingsManager">
+        ''' An instance of <see cref="IAppSettingsManager"/> used to manage application settings.
+        ''' </param>
+        ''' <param name="failureHandler">
+        ''' An instance of <see cref="IFailureHandler"/> used to handle failures.
+        ''' </param>
         ''' <remarks>
         ''' The constructor takes an <see cref="IServiceProvider"/>, an <see cref="IUserPrompter"/>, 
         ''' an <see cref="IUserInputReader"/>, an <see cref="IProgramPathValidator"/>, an <see cref="IAppDataManager"/>, 
-        ''' and an <see cref="IExtractorService"/> as parameters and assigns them to the corresponding fields.
+        ''' an <see cref="IExtractorService"/>, an <see cref="IAppSettingsManager"/>, and an <see cref="IFailureHandler"/> as parameters and assigns them to the corresponding fields.
         ''' </remarks>
-        Public Sub New(serviceProvider As IServiceProvider, userPrompter As IUserPrompter, userInputReader As IUserInputReader, programPathValidator As IProgramPathValidator, appDataManager As IAppDataManager, extractorService As IExtractorService)
+        Public Sub New(serviceProvider As IServiceProvider, userPrompter As IUserPrompter, userInputReader As IUserInputReader, programPathValidator As IProgramPathValidator, appDataManager As IAppDataManager, extractorService As IExtractorService, appSettingsManager As IAppSettingsManager, failureHandler As IFailureHandler)
             _serviceProvider = serviceProvider
             _userPrompter = userPrompter
             _userInputReader = userInputReader
             _programPathValidator = programPathValidator
             _appDataManager = appDataManager
             _extractorService = extractorService
+            _appSettingsManager = appSettingsManager
+            _failureHandler = failureHandler
         End Sub
 
         ''' <summary>
@@ -93,6 +104,14 @@
             Dim programPath = GetValidProgramPath()
             PromptUser(programPath)
             Await EnsureDirectoriesAndFilesExistAsync()
+            Try
+                Dim writeSuccess As Boolean = Await _appSettingsManager.WriteSettings()
+                If Not writeSuccess Then
+                    _failureHandler.HandleFailure("Writing settings was not successful, but no specific errors were reported.")
+                End If
+            Catch ex As Exception
+                _failureHandler.HandleFailure("An error occurred while writing settings.")
+            End Try
             ReadUserInput()
         End Function
 
@@ -103,7 +122,6 @@
         Private Function GetValidProgramPath() As String
             Return _programPathValidator.GetValidProgramPath()
         End Function
-
         ''' <summary>
         ''' Prompts the user with the program path.
         ''' </summary>
