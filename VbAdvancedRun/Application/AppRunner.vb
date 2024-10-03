@@ -104,14 +104,7 @@
             Dim programPath = GetValidProgramPath()
             PromptUser(programPath)
             Await EnsureDirectoriesAndFilesExistAsync()
-            Try
-                Dim writeSuccess As Boolean = Await _appSettingsManager.WriteSettings()
-                If Not writeSuccess Then
-                    _failureHandler.HandleFailure("Writing settings was not successful, but no specific errors were reported.")
-                End If
-            Catch ex As Exception
-                _failureHandler.HandleFailure("An error occurred while writing settings.")
-            End Try
+            Await WriteSettingsAsync()
             ReadUserInput()
         End Function
 
@@ -137,6 +130,26 @@
         Friend Async Function EnsureDirectoriesAndFilesExistAsync() As Task
             _appDataManager.CreateServiceDirectory()
             Await _extractorService.ExtractAllWithMessagingAsync()
+        End Function
+
+        ''' <summary>
+        ''' Asynchronously writes the application settings using the <see cref=".WriteSettings"/>.
+        ''' </summary>
+        ''' <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        ''' <remarks>
+        ''' This method attempts to write settings using the <see cref="IAppSettingsManager.WriteSettings"/> method. If the 
+        ''' operation fails, it calls the <see cref="IFailureHandler.HandleFailure"/> method with an appropriate message. 
+        ''' Exceptions are also caught and handled by reporting a failure through the same mechanism.
+        ''' </remarks>
+        Private Async Function WriteSettingsAsync() As Task
+            Try
+                Dim writeSuccess As Boolean = Await _appSettingsManager.WriteSettings()
+                If Not writeSuccess Then
+                    _failureHandler.HandleFailure("Writing settings was not successful, but no specific errors were reported.")
+                End If
+            Catch ex As Exception
+                _failureHandler.HandleFailure("An error occurred while writing settings.")
+            End Try
         End Function
 
         ''' <summary>
