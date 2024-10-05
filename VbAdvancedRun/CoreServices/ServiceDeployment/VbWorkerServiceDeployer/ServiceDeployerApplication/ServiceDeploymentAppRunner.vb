@@ -134,7 +134,9 @@
         ''' <remarks>
         ''' This method retrieves the service path from the <see cref="PathStorage"/> singleton instance,
         ''' extracts the service name from the path, and uses the <see cref="IUserPrompter"/> to display
-        ''' a message to the user indicating the successful launch of the service and instructing them to press any key to exit.
+        ''' a message to the user indicating the successful launch of the service. 
+        ''' Note that this message arrives a little late after the process has launched, 
+        ''' but we really don't care lol. Instructs the user to press any key to exit.
         ''' </remarks>
         Private Sub PromptServiceLaunch()
             Dim processPath As String = PathStorage.Instance.ProgramPath
