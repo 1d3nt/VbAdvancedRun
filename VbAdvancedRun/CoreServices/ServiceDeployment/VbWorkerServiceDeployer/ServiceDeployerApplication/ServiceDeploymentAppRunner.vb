@@ -42,7 +42,7 @@
         ''' The constructor takes an <see cref="IServiceProvider"/>, an <see cref="IUserPrompter"/>, an <see cref="IUserInputReader"/> 
         ''' and an <see cref="IFailureHandler"/> as parameters and assigns them to the corresponding fields.
         ''' </remarks>
-        Friend Sub New(serviceProvider As IServiceProvider, userPrompter As IUserPrompter, failureHandler As IFailureHandler)
+        Public Sub New(serviceProvider As IServiceProvider, userPrompter As IUserPrompter, failureHandler As IFailureHandler)
             _serviceProvider = serviceProvider
             _userPrompter = userPrompter
             _failureHandler = failureHandler
@@ -57,9 +57,10 @@
         ''' </remarks>
         Friend Async Function RunAsync() As Task(Of Boolean) Implements IServiceDeploymentAppRunner.RunAsync
             Try
-                InstallService()
-                Await DelayBeforeUninstall()
-                UninstallService()
+                Await InstallServiceAsync()
+                Await DelayBeforeAction()
+                Await UninstallService()
+                PromptServiceLaunch()
                 Return True
             Catch ex As Exception
                 _failureHandler.HandleFailure("An error occurred while running the application.")
@@ -73,27 +74,27 @@
         ''' <remarks>
         ''' This method attempts to install the service and handles any exceptions that occur during the installation process.
         ''' </remarks>
-        Private Sub InstallService()
+        Private Async Function InstallServiceAsync() As Task
             Dim serviceInstaller = _serviceProvider.GetService(Of IServiceInstaller)()
             Try
-                Dim installationSuccess = serviceInstaller.InstallService()
+                Dim installationSuccess = Await serviceInstaller.InstallServiceAsync()
                 _userPrompter.Prompt($"Service installation success: {installationSuccess}")
             Catch ex As Exception
                 _failureHandler.HandleFailure($"Service installation failed: {ex.Message}")
             End Try
-        End Sub
+        End Function
 
         ''' <summary>
-        ''' Introduces a delay before proceeding to uninstall the service.
+        ''' Introduces a delay before proceeding with an action.
         ''' </summary>
         ''' <returns>
         ''' A task that represents the asynchronous operation.
         ''' </returns>
         ''' <remarks>
-        ''' The <see cref="DelayBeforeUninstall"/> method prompts the user about the delay duration and then simulates a delay
-        ''' before proceeding to uninstall the service.
+        ''' The <see cref="DelayBeforeAction"/> method prompts the user about the delay duration and then simulates a delay
+        ''' before proceeding with the specified action.
         ''' </remarks>
-        Private Async Function DelayBeforeUninstall() As Task
+        Private Async Function DelayBeforeAction() As Task
             Const delayMilliseconds = 10000
             PromptUserAboutDelay(delayMilliseconds)
             Await AsynchronousProcessor.SimulateDelayedResponse(delayMilliseconds)
@@ -117,7 +118,7 @@
         ''' <remarks>
         ''' This method attempts to uninstall the service and handles any exceptions that occur during the uninstallation process.
         ''' </remarks>
-        Private Async Sub UninstallService()
+        Private Async Function UninstallService() As Task
             Dim serviceUninstaller = _serviceProvider.GetService(Of IServiceUninstaller)()
             Try
                 Dim uninstallationSuccess = Await serviceUninstaller.UninstallServiceAsync()
@@ -125,6 +126,20 @@
             Catch ex As Exception
                 _failureHandler.HandleFailure($"Service uninstallation failed: {ex.Message}")
             End Try
+        End Function
+
+        ''' <summary>
+        ''' Prompts the user with a message indicating that the service has been successfully launched.
+        ''' </summary>
+        ''' <remarks>
+        ''' This method retrieves the service path from the <see cref="PathStorage"/> singleton instance,
+        ''' extracts the service name from the path, and uses the <see cref="IUserPrompter"/> to display
+        ''' a message to the user indicating the successful launch of the service and instructing them to press any key to exit.
+        ''' </remarks>
+        Private Sub PromptServiceLaunch()
+            Dim processPath As String = PathStorage.Instance.ProgramPath
+            Dim processName As String = Path.GetFileName(processPath)
+            _userPrompter.Prompt($"The process '{processName}' has been successfully launched. Press any key to exit.")
         End Sub
     End Class
 End Namespace

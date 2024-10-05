@@ -303,8 +303,8 @@
         ''' <seealso cref="IAppRunner"/>
         Private Shared Sub RegisterAppRunner(services As IServiceCollection)
             Dim appRunnerServices As New Dictionary(Of Type, Type) From {
-                    {GetType(IServiceDeploymentAppRunner), GetType(ServiceDeploymentAppRunner)},
-                    {GetType(IAppRunner), GetType(AppRunner)}
+                        {GetType(IServiceDeploymentAppRunner), GetType(ServiceDeploymentAppRunner)},
+                        {GetType(IAppRunner), GetType(AppRunner)}
                     }
             AddServices(services, appRunnerServices)
         End Sub

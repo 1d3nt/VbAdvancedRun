@@ -14,7 +14,7 @@
     ''' installers conform to a consistent contract, facilitating integration and management of services 
     ''' across different parts of the application.
     ''' 
-    ''' The <see cref="IServiceInstaller.InstallService"/> method is central to this contract, and it 
+    ''' The <see cref="IServiceInstaller.InstallServiceAsync"/> method is central to this contract, and it 
     ''' is used to initiate the installation process. Implementing classes should ensure that this method 
     ''' performs the required actions to install the service and return an appropriate status indicating 
     ''' the success or failure of the operation.
@@ -23,13 +23,13 @@
     Public Interface IServiceInstaller
 
         ''' <summary>
-        ''' Installs the service.
+        ''' Installs the service asynchronously.
         ''' </summary>
         ''' <returns>
-        ''' <c>True</c> if the service was installed successfully; otherwise, <c>False</c>.
+        ''' A task that represents the asynchronous operation. The task result contains <c>True</c> if the service was installed successfully; otherwise, <c>False</c>.
         ''' </returns>
         ''' <remarks>
-        ''' The <see cref="InstallService"/> method should implement the logic required 
+        ''' The <see cref="InstallServiceAsync"/> method should implement the logic required 
         ''' to install a service, including any necessary configuration and setup steps. The method is 
         ''' expected to return <c>True</c> upon successful installation of the service, indicating that 
         ''' the service has been correctly set up and registered. If the installation fails or encounters 
@@ -37,6 +37,6 @@
         ''' successfully. This allows the caller to handle any errors or take appropriate actions based 
         ''' on the success or failure of the service installation.
         ''' </remarks>
-        Function InstallService() As Boolean
+        Function InstallServiceAsync() As Task(Of Boolean)
     End Interface
 End Namespace

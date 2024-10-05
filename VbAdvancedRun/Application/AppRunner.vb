@@ -32,11 +32,6 @@
         Private ReadOnly _appDataManager As IAppDataManager
 
         ''' <summary>
-        ''' The service provider used to resolve services.
-        ''' </summary>
-        Private ReadOnly _serviceProvider As IServiceProvider
-
-        ''' <summary>
         ''' The extractor service used for extracting resources and archives.
         ''' </summary>
         Private ReadOnly _extractorService As IExtractorService
@@ -59,9 +54,6 @@
         ''' <summary>
         ''' Initializes a new instance of the <see cref="AppRunner"/> class.
         ''' </summary>
-        ''' <param name="serviceProvider">
-        ''' An instance of <see cref="IServiceProvider"/> used to resolve services.
-        ''' </param>
         ''' <param name="userPrompter">
         ''' An instance of <see cref="IUserPrompter"/> used to display messages to the user.
         ''' </param>
@@ -92,10 +84,9 @@
         ''' an <see cref="IExtractorService"/>, an <see cref="IAppSettingsManager"/>, an <see cref="IFailureHandler"/>, 
         ''' and an <see cref="IServiceDeploymentAppRunner"/> as parameters and assigns them to the corresponding fields.
         ''' </remarks>
-        Public Sub New(serviceProvider As IServiceProvider, userPrompter As IUserPrompter, userInputReader As IUserInputReader, 
+        Public Sub New(userPrompter As IUserPrompter, userInputReader As IUserInputReader, 
                        programPathValidator As IProgramPathValidator, appDataManager As IAppDataManager, extractorService As IExtractorService, 
                        appSettingsManager As IAppSettingsManager, failureHandler As IFailureHandler, serviceDeploymentAppRunner As IServiceDeploymentAppRunner)
-            _serviceProvider = serviceProvider
             _userPrompter = userPrompter
             _userInputReader = userInputReader
             _programPathValidator = programPathValidator
@@ -176,7 +167,15 @@
         ''' <summary>
         ''' Executes the service deployment process asynchronously.
         ''' </summary>
-        ''' <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        ''' <returns>
+        ''' A <see cref="Task"/> representing the asynchronous operation.
+        ''' </returns>
+        ''' <remarks>
+        ''' This method initiates the service deployment by invoking the <see cref="IServiceDeploymentAppRunner.RunAsync"/> method. 
+        ''' If the deployment fails, the <see cref="IFailureHandler.HandleFailure"/> method is called to handle the failure.
+        ''' Upon successful completion, the service is assumed to have been launched, although no runtime checks are performed to 
+        ''' verify if the process is running.
+        ''' </remarks>
         Private Async Function ExecuteServiceDeploymentAsync() As Task
             Dim deploySuccess = Await _serviceDeploymentAppRunner.RunAsync()
             If Not deploySuccess Then

@@ -1,4 +1,4 @@
-﻿Namespace CoreServices.WindowsApiInterop.Enums
+﻿Namespace CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerCoreServices.WindowsApiInterop.Enums
 
     ''' <summary>
     ''' Defines common Windows error codes.

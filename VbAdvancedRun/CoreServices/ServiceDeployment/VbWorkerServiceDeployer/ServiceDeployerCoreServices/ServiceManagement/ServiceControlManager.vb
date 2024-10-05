@@ -1,4 +1,4 @@
-﻿Namespace CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerServiceDeployerCoreServices.ServiceManagement
+﻿Namespace CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerCoreServices.ServiceManagement
 
     ''' <summary>
     ''' Handles opening and closing the Service Control Manager.

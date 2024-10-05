@@ -44,28 +44,30 @@
         End Sub
 
         ''' <summary>
-        ''' Installs the service.
+        ''' Installs the service asynchronously.
         ''' </summary>
-        ''' <returns><c>True</c> if the service was installed successfully; otherwise, <c>False</c>.</returns>
+        ''' <returns>A task that represents the asynchronous operation. The task result contains <c>True</c> if the service was installed successfully; otherwise, <c>False</c>.</returns>
         ''' <remarks>
         ''' This method performs the service installation process, which includes opening a connection to the
         ''' Service Control Manager, creating the service using <see cref="IServiceCreator"/>, and starting the service
         ''' using <see cref="IServiceStarter"/>. It returns <c>True</c> if the service installation completes successfully.
         ''' </remarks>
-        Friend Function InstallService() As Boolean Implements IServiceInstaller.InstallService
-            Dim serviceControlManager As IntPtr = NativeMethods.NullHandleValue
-            Dim serviceHandle As IntPtr = NativeMethods.NullHandleValue
-            Try
-                serviceControlManager = _serviceControlManager.Open(ServiceManagerAccessFlags.CreateService)
-                serviceHandle = _serviceCreator.Create(serviceControlManager)
-                _serviceStarter.StartService(serviceHandle)
-                Return True
-            Catch
-                Throw
-            Finally
-                _serviceControlManager.Close(serviceControlManager)
-                _serviceControlManager.Close(serviceHandle)
-            End Try
+        Friend Async Function InstallServiceAsync() As Task(Of Boolean) Implements IServiceInstaller.InstallServiceAsync
+            Return Await Task.Run(Function()
+                Dim serviceControlManager As IntPtr = NativeMethods.NullHandleValue
+                Dim serviceHandle As IntPtr = NativeMethods.NullHandleValue
+                Try
+                    serviceControlManager = _serviceControlManager.Open(ServiceManagerAccessFlags.CreateService)
+                    serviceHandle = _serviceCreator.Create(serviceControlManager)
+                    _serviceStarter.StartService(serviceHandle)
+                    Return True
+                Catch
+                    Throw
+                Finally
+                    _serviceControlManager.Close(serviceControlManager)
+                    _serviceControlManager.Close(serviceHandle)
+                End Try
+            End Function)
         End Function
     End Class
 End Namespace

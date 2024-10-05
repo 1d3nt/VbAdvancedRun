@@ -4,7 +4,7 @@
     ''' Defines the contract for extracting resources and archives.
     ''' </summary>
     ''' <remarks>
-    ''' This interface includes the <see cref="IExtractorService.ExtractAllAsync"/> method for asynchronous extraction of resources and archives.
+    ''' This interface includes the <see cref="IExtractorService.ExtractAllWithMessagingAsync"/> method for asynchronous extraction of resources and archives.
     ''' </remarks>
     Public Interface IExtractorService
 

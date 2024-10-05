@@ -11,12 +11,24 @@
         Implements IServicePathProvider
 
         ''' <summary>
-        ''' Gets the full path to the service executable using the current user's Desktop directory.
+        ''' The app data manager used for managing application data directories.
         ''' </summary>
-        ''' <returns>The full path to the service executable located on the user's Desktop.</returns>
+        Private ReadOnly _appDataManager As IAppDataManager
+
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="ServicePathProvider"/> class.
+        ''' </summary>
+        ''' <param name="appDataManager">An instance of <see cref="IAppDataManager"/> used to manage application data directories.</param>
+        Public Sub New(appDataManager As IAppDataManager)
+            _appDataManager = appDataManager
+        End Sub
+
+        ''' <summary>
+        ''' Gets the full path to the service executable.
+        ''' </summary>
+        ''' <returns>The full path to the service executable.</returns>
         Friend Function GetServicePath() As String Implements IServicePathProvider.GetServicePath
-            Dim desktopPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-            Return io.Path.Combine(desktopPath, "ServiceTest", "WorkerService", "VbWorkerServicePinvokeLauncher.exe")
+            Return Path.Combine(_appDataManager.GetServiceDirectoryPath(), "VbWorkerServicePinvokeLauncher.exe")
         End Function
 
         ''' <summary>
@@ -27,7 +39,7 @@
         ''' </returns>
         Friend Function GetServiceName() As String Implements IServicePathProvider.GetServiceName
             Dim servicePath As String = GetServicePath()
-            Dim serviceName As String = IO.Path.GetFileNameWithoutExtension(servicePath)
+            Dim serviceName As String = Path.GetFileNameWithoutExtension(servicePath)
             Return serviceName
         End Function
     End Class
