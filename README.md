@@ -138,6 +138,7 @@ All settings, including the process to be launched, are configured via `appsetti
 |   +-- UserPrompter.vb
 |-- GlobalAttributes.vb
 +-- Program.vb
+```
 
 # Contributing Guidelines
 
@@ -183,14 +184,3 @@ We welcome contributions to **VbAdvancedRun**! To ensure a smooth collaboration,
    - Navigate to the original repository and click on the "Pull Requests" tab. Then click "New Pull Request."
    - Select your branch and provide a description of your changes. Explain why your changes are necessary and what issue they address.
 
-## Code of Conduct
-
-Please note that we have a code of conduct in place to ensure a welcoming and inclusive environment for all contributors. By participating in this project, you agree to abide by its terms.
-
-## Issues and Feature Requests
-
-If you find a bug or would like to request a new feature, please open an issue in the GitHub repository. Be sure to provide as much detail as possible, including steps to reproduce any bugs.
-
-## Thank You!
-
-We appreciate your interest in contributing to **VbAdvancedRun** and look forward to your pull requests!
