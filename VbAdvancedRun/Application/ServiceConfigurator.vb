@@ -67,6 +67,7 @@
             RegisterResourceExtractorServices(services)
             RegisterAppRunner(services)
             RegisterSettingsServices(services)
+            RegisterServiceManagementServices(services)
         End Sub
 
         ''' <summary>
@@ -117,7 +118,7 @@
                         {GetType(IWin32ErrorUtility), GetType(Win32ErrorUtility)},
                         {GetType(IErrorHandlingService), GetType(ErrorHandlingService)},
                         {GetType(IExitUtility), GetType(ExitUtility)},
-                        {GetType(IFailureHandler), GetType(FailureHandler)} ' Register the FailureHandler
+                        {GetType(IFailureHandler), GetType(FailureHandler)}
                     }
             AddServices(services, errorHandlingServices)
         End Sub
@@ -276,15 +277,20 @@
         End Sub
 
         ''' <summary>
-        ''' Registers the <see cref="AppRunner"/> service.
+        ''' Registers the application runner services.
         ''' </summary>
         ''' <param name="services">
-        ''' The service collection to which the <see cref="IAppRunner"/> service is added. This instance of <see cref="IServiceCollection"/> 
+        ''' The service collection to which the application runner services are added. This instance of <see cref="IServiceCollection"/> 
         ''' is used to register services and their implementations for dependency injection.
         ''' </param>
         ''' <remarks>
-        ''' This method registers the following service:
+        ''' This method registers the following services:
         ''' <list type="bullet">
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IServiceDeploymentAppRunner"/> is registered as a transient service. This service is responsible for managing application runs and operations.
+        '''     </description>
+        '''   </item>
         '''   <item>
         '''     <description>
         '''       <see cref="IAppRunner"/> is registered as a transient service. This service is responsible for managing application runs and operations.
@@ -292,11 +298,13 @@
         '''   </item>
         ''' </list>
         ''' </remarks>
-        ''' <seealso cref="IAppRunner"/>
+        ''' <seealso cref="IServiceDeploymentAppRunner"/>
         ''' <seealso cref="AppRunner"/>
+        ''' <seealso cref="IAppRunner"/>
         Private Shared Sub RegisterAppRunner(services As IServiceCollection)
             Dim appRunnerServices As New Dictionary(Of Type, Type) From {
-                        {GetType(IAppRunner), GetType(AppRunner)}
+                    {GetType(IServiceDeploymentAppRunner), GetType(ServiceDeploymentAppRunner)},
+                    {GetType(IAppRunner), GetType(AppRunner)}
                     }
             AddServices(services, appRunnerServices)
         End Sub
@@ -343,6 +351,103 @@
             AddServices(services, settingsServices)
         End Sub
 
+        ''' <summary>
+        ''' Registers service management services.
+        ''' </summary>
+        ''' <param name="services">
+        ''' The service collection to which the service management services are added. This instance of <see cref="IServiceCollection"/> 
+        ''' is used to register services and their implementations for dependency injection.
+        ''' </param>
+        ''' <remarks>
+        ''' This method registers the following service management services:
+        ''' <list type="bullet">
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IServicePathProvider"/> is implemented by <see cref="ServicePathProvider"/>. This service provides paths 
+        '''       for services.
+        '''     </description>
+        '''   </item>
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IServiceControlManager"/> is implemented by <see cref="ServiceControlManager"/>. This service manages 
+        '''       interactions with the service control manager.
+        '''     </description>
+        '''   </item>
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IServiceCreator"/> is implemented by <see cref="ServiceCreator"/>. This service is responsible for creating services.
+        '''     </description>
+        '''   </item>
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IServiceInstaller"/> is implemented by <see cref="ServiceInstaller"/>. This service handles the installation 
+        '''       of services.
+        '''     </description>
+        '''   </item>
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IServiceStarter"/> is implemented by <see cref="ServiceStarter"/>. This service handles starting services.
+        '''     </description>
+        '''   </item>
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IServiceStopper"/> is implemented by <see cref="ServiceStopper"/>. This service handles stopping services.
+        '''     </description>
+        '''   </item>
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IServiceStatusChecker"/> is implemented by <see cref="ServiceStatusChecker"/>. This service provides functionality 
+        '''       to check the status of services.
+        '''     </description>
+        '''   </item>
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IServiceDeleter"/> is implemented by <see cref="ServiceDeleter"/>. This service provides functionality to mark 
+        '''       services for deletion from the service control manager database.
+        '''     </description>
+        '''   </item>
+        '''   <item>
+        '''     <description>
+        '''       <see cref="IServiceUninstaller"/> is implemented by <see cref="ServiceUninstaller"/>. This service handles the uninstallation 
+        '''       of services.
+        '''     </description>
+        '''   </item>
+        ''' </list>
+        ''' For additional information, refer to the <see href="https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.servicecollectionextensions.addservices">ServiceCollectionExtensions.AddServices</see> documentation.
+        ''' </remarks>
+        ''' <seealso cref="AddServices"/>
+        ''' <seealso cref="IServicePathProvider"/>
+        ''' <seealso cref="ServicePathProvider"/>
+        ''' <seealso cref="IServiceControlManager"/>
+        ''' <seealso cref="ServiceControlManager"/>
+        ''' <seealso cref="IServiceCreator"/>
+        ''' <seealso cref="ServiceCreator"/>
+        ''' <seealso cref="IServiceInstaller"/>
+        ''' <seealso cref="ServiceInstaller"/>
+        ''' <seealso cref="IServiceStarter"/>
+        ''' <seealso cref="ServiceStarter"/>
+        ''' <seealso cref="IServiceStopper"/>
+        ''' <seealso cref="ServiceStopper"/>
+        ''' <seealso cref="IServiceStatusChecker"/>
+        ''' <seealso cref="ServiceStatusChecker"/>
+        ''' <seealso cref="IServiceDeleter"/>
+        ''' <seealso cref="ServiceDeleter"/>
+        ''' <seealso cref="IServiceUninstaller"/>
+        ''' <seealso cref="ServiceUninstaller"/>
+        Private Shared Sub RegisterServiceManagementServices(services As IServiceCollection)
+            Dim serviceManagementServices As New Dictionary(Of Type, Type) From {
+                {GetType(IServicePathProvider), GetType(ServicePathProvider)},
+                {GetType(IServiceControlManager), GetType(ServiceControlManager)},
+                {GetType(IServiceCreator), GetType(ServiceCreator)},
+                {GetType(IServiceInstaller), GetType(ServiceInstaller)},
+                {GetType(IServiceStarter), GetType(ServiceStarter)},
+                {GetType(IServiceStopper), GetType(ServiceStopper)},
+                {GetType(IServiceStatusChecker), GetType(ServiceStatusChecker)},
+                {GetType(IServiceDeleter), GetType(ServiceDeleter)},
+                {GetType(IServiceUninstaller), GetType(ServiceUninstaller)}
+            }
+            AddServices(services, serviceManagementServices)
+        End Sub
 
         ''' <summary>
         ''' Adds the specified services to the service collection.

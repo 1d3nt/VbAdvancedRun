@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>VbAdvancedRun</RootNamespace>
     <TargetFramework>net8.0-windows7.0</TargetFramework>
-    <ImportedNamespaces>JetBrains.Annotations=False,Microsoft.Extensions.DependencyInjection=False,Microsoft.Extensions.DependencyInjection.Extensions=False,Newtonsoft.Json=False,Newtonsoft.Json.Serialization=False,System.Diagnostics.CodeAnalysis=False,System.IO=False,System.Reflection=False,System.Runtime.InteropServices=False,System.Runtime.Versioning=False,VbAdvancedRun.Application=False,VbAdvancedRun.Application.Interfaces=False,VbAdvancedRun.CoreServices.Configuration=False,VbAdvancedRun.CoreServices.Configuration.Interfaces=False,VbAdvancedRun.CoreServices.FileSystem=False,VbAdvancedRun.CoreServices.FileSystem.Interfaces=False,VbAdvancedRun.CoreServices.WindowsApiInterop.Enums=False,VbAdvancedRun.CoreServices.WindowsApiInterop.Methods=False,VbAdvancedRun.Utilities=False,VbAdvancedRun.Utilities.ErrorHandling=False,VbAdvancedRun.Utilities.ErrorHandling.Interfaces=False,VbAdvancedRun.Utilities.Extractor=False,VbAdvancedRun.Utilities.Extractor.Interfaces=False,VbAdvancedRun.Utilities.Interfaces=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,VbAdvancedRun=True</ImportedNamespaces>
+    <ImportedNamespaces>JetBrains.Annotations=False,Microsoft.Extensions.DependencyInjection=False,Microsoft.Extensions.DependencyInjection.Extensions=False,Newtonsoft.Json=False,Newtonsoft.Json.Serialization=False,System.Diagnostics.CodeAnalysis=False,System.IO=False,System.Reflection=False,System.Runtime.InteropServices=False,System.Runtime.Versioning=False,VbAdvancedRun.Application=False,VbAdvancedRun.Application.Interfaces=False,VbAdvancedRun.CoreServices.Configuration=False,VbAdvancedRun.CoreServices.Configuration.Interfaces=False,VbAdvancedRun.CoreServices.FileSystem=False,VbAdvancedRun.CoreServices.FileSystem.Interfaces=False,VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.Application=False,VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.Application.Interfaces=False,VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerApplication.Interfaces=False,VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerCoreServices.ServiceManagement.Interfaces=False,VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerUtilities.ServiceDeployerErrorHandling.Interfaces=False,VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeploymentApplication=False,VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeploymentApplication.Interfaces=False,VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.Utilities=False,VbAdvancedRun.CoreServices.WindowsApiInterop.Enums=False,VbAdvancedRun.CoreServices.WindowsApiInterop.Methods=False,VbAdvancedRun.Utilities=False,VbAdvancedRun.Utilities.ErrorHandling=False,VbAdvancedRun.Utilities.ErrorHandling.Interfaces=False,VbAdvancedRun.Utilities.Extractor=False,VbAdvancedRun.Utilities.Extractor.Interfaces=False,VbAdvancedRun.Utilities.Interfaces=False,Microsoft.VisualBasic=True,System=True,System.Collections=True,System.Collections.Generic=True,System.Diagnostics=True,System.Linq=True,System.Xml.Linq=True,System.Threading.Tasks=True,VbAdvancedRun=True</ImportedNamespaces>
     <OptionStrict>On</OptionStrict>
   </PropertyGroup>
 
@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="CoreServices\ProcessManagement\Interfaces\" />
+    <Folder Include="CoreServices\ServiceDeployment\VbWorkerServiceDeployer\ServiceDeployerUtilities\Interfaces\" />
     <Folder Include="CoreServices\WindowsApiInterop\Enums\" />
     <Folder Include="CoreServices\WindowsApiInterop\Structs\" />
   </ItemGroup>
@@ -39,6 +40,14 @@
     <Import Include="VbAdvancedRun.CoreServices.Configuration.Interfaces" />
     <Import Include="VbAdvancedRun.CoreServices.FileSystem" />
     <Import Include="VbAdvancedRun.CoreServices.FileSystem.Interfaces" />
+    <Import Include="VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.Application" />
+    <Import Include="VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.Application.Interfaces" />
+    <Import Include="VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerApplication.Interfaces" />
+    <Import Include="VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerCoreServices.ServiceManagement.Interfaces" />
+    <Import Include="VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerUtilities.ServiceDeployerErrorHandling.Interfaces" />
+    <Import Include="VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeploymentApplication" />
+    <Import Include="VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeploymentApplication.Interfaces" />
+    <Import Include="VbAdvancedRun.CoreServices.ServiceDeployment.VbWorkerServiceDeployer.Utilities" />
     <Import Include="VbAdvancedRun.CoreServices.WindowsApiInterop.Enums" />
     <Import Include="VbAdvancedRun.CoreServices.WindowsApiInterop.Methods" />
     <Import Include="VbAdvancedRun.Utilities" />

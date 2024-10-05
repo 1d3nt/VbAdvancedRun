@@ -1,4 +1,4 @@
-﻿Namespace Utilities.ErrorHandling.Interfaces
+﻿Namespace CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerUtilities.ServiceDeployerErrorHandling.Interfaces
 
     ''' <summary>
     ''' Defines methods for working with Win32 error codes and retrieving their friendly descriptions.

@@ -63,14 +63,15 @@ Module Program
     End Sub
 
     ''' <summary>
-    ''' Configures services for dependency injection.
+    ''' Configures services for dependency injection, including services for both the main application and the VbWorkerServiceDeployer.
     ''' </summary>
     ''' <returns>
-    ''' An instance of <see cref="IServiceProvider"/> configured with the necessary services.
+    ''' An instance of <see cref="IServiceProvider"/> configured with the necessary services from both the main application and the deployer.
     ''' </returns>
     Private Function ConfigureServices() As IServiceProvider
-        Dim serviceConfigurator As New ServiceConfigurator()
-        Return serviceConfigurator.ConfigureServices()
+        Dim mainServiceConfigurator As New ServiceConfigurator()
+        Dim serviceProvider As IServiceProvider = mainServiceConfigurator.ConfigureServices()
+        Return serviceProvider
     End Function
 
     ''' <summary>

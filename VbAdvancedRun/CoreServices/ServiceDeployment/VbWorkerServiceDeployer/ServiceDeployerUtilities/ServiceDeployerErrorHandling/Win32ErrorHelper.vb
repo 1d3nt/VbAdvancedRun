@@ -1,24 +1,21 @@
-﻿Namespace Utilities.ErrorHandling.Interfaces
+﻿Namespace CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerUtilities.ServiceDeployerErrorHandling
 
     ''' <summary>
-    ''' Provides an interface for handling Win32 errors.
+    ''' Provides utility methods for handling Win32 errors.
     ''' </summary>
     ''' <remarks>
-    ''' The <see cref="IWin32ErrorHelper"/> interface defines a method for retrieving the last Win32 error code.
-    ''' Implementations of this interface should provide a mechanism to obtain the last error code 
-    ''' as saved by the CLR after a P/Invoke call.
-    ''' 
-    ''' The <see cref="UsedImplicitlyAttribute"/> indicates that the method is used implicitly, either through reflection or external 
-    ''' libraries, even if it appears unused in the current codebase. This helps prevent code analysis tools from incorrectly 
-    ''' flagging the method as unused and suggesting its removal.
-    ''' 
-    ''' For more details on how to handle Win32 errors in managed code, refer to 
+    ''' In the context of managed code, using the <see cref="Marshal.GetLastWin32Error"/> method 
+    ''' is essential instead of calling the Win32 <c>GetLastError</c> API directly.
+    ''' This is because the CLR may make additional system calls while transitioning 
+    ''' from unmanaged to managed code, which can overwrite the last error code.
+    ''' For more details, see Adam Nathan's blog post:
     ''' <a href="https://web.archive.org/web/20151221201611/http://blogs.msdn.com/b/adam_nathan/archive/2003/04/25/56643.aspx">
     ''' Archived Version</a> or the 
     ''' <a href="http://blogs.msdn.com/b/adam_nathan/archive/2003/04/25/56643.aspx">Original URL</a>.
     ''' </remarks>
-    ''' <seealso cref="Win32ErrorHelper"/>
-    Public Interface IWin32ErrorHelper
+    ''' <seealso cref="IWin32ErrorHelper"/>
+    Friend Class Win32ErrorHelper
+        Implements IWin32ErrorHelper
 
         ''' <summary>
         ''' Retrieves the last Win32 error code.
@@ -32,6 +29,8 @@
         ''' This is important because the CLR saves the result of <c>GetLastError</c> immediately after the unmanaged API call completes, 
         ''' preventing it from being overwritten by subsequent system calls made by the CLR.
         ''' </remarks>
-        Function GetLastWin32Error() As Integer
-    End Interface
+        Friend Function GetLastWin32Error() As Integer Implements IWin32ErrorHelper.GetLastWin32Error
+            Return Marshal.GetLastWin32Error()
+        End Function
+    End Class
 End Namespace

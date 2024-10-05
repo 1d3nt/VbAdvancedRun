@@ -1,4 +1,4 @@
-﻿Namespace Utilities.ErrorHandling
+﻿Namespace CoreServices.ServiceDeployment.VbWorkerServiceDeployer.ServiceDeployerUtilities.ServiceDeployerErrorHandling
 
     ''' <summary>
     ''' Provides utility methods for handling Win32 errors, including retrieving friendly error descriptions.

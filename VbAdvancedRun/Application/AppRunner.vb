@@ -15,26 +15,32 @@
         ''' The user prompter used for displaying messages to the user.
         ''' </summary>
         Private ReadOnly _userPrompter As IUserPrompter
+
         ''' <summary>
         ''' The user input reader used for reading user input.
         ''' </summary>
         Private ReadOnly _userInputReader As IUserInputReader
+
         ''' <summary>
         ''' The program path validator used for validating program paths.
         ''' </summary>
         Private ReadOnly _programPathValidator As IProgramPathValidator
+
         ''' <summary>
         ''' The app data manager used for managing application data directories.
         ''' </summary>
         Private ReadOnly _appDataManager As IAppDataManager
+
         ''' <summary>
         ''' The service provider used to resolve services.
         ''' </summary>
         Private ReadOnly _serviceProvider As IServiceProvider
+
         ''' <summary>
         ''' The extractor service used for extracting resources and archives.
         ''' </summary>
         Private ReadOnly _extractorService As IExtractorService
+
         ''' <summary>
         ''' The app settings manager used to manage application settings.
         ''' </summary>
@@ -44,6 +50,11 @@
         ''' The failure handler used to handle failures by prompting the user and exiting the application with an error.
         ''' </summary>
         Private ReadOnly _failureHandler As IFailureHandler
+
+        ''' <summary>
+        ''' The service deployment application runner used for managing service deployment operations.
+        ''' </summary>
+        Private ReadOnly _serviceDeploymentAppRunner As IServiceDeploymentAppRunner
 
         ''' <summary>
         ''' Initializes a new instance of the <see cref="AppRunner"/> class.
@@ -72,12 +83,18 @@
         ''' <param name="failureHandler">
         ''' An instance of <see cref="IFailureHandler"/> used to handle failures.
         ''' </param>
+        ''' <param name="serviceDeploymentAppRunner">
+        ''' An instance of <see cref="IServiceDeploymentAppRunner"/> used to manage service deployment.
+        ''' </param>
         ''' <remarks>
         ''' The constructor takes an <see cref="IServiceProvider"/>, an <see cref="IUserPrompter"/>, 
         ''' an <see cref="IUserInputReader"/>, an <see cref="IProgramPathValidator"/>, an <see cref="IAppDataManager"/>, 
-        ''' an <see cref="IExtractorService"/>, an <see cref="IAppSettingsManager"/>, and an <see cref="IFailureHandler"/> as parameters and assigns them to the corresponding fields.
+        ''' an <see cref="IExtractorService"/>, an <see cref="IAppSettingsManager"/>, an <see cref="IFailureHandler"/>, 
+        ''' and an <see cref="IServiceDeploymentAppRunner"/> as parameters and assigns them to the corresponding fields.
         ''' </remarks>
-        Public Sub New(serviceProvider As IServiceProvider, userPrompter As IUserPrompter, userInputReader As IUserInputReader, programPathValidator As IProgramPathValidator, appDataManager As IAppDataManager, extractorService As IExtractorService, appSettingsManager As IAppSettingsManager, failureHandler As IFailureHandler)
+        Public Sub New(serviceProvider As IServiceProvider, userPrompter As IUserPrompter, userInputReader As IUserInputReader, 
+                       programPathValidator As IProgramPathValidator, appDataManager As IAppDataManager, extractorService As IExtractorService, 
+                       appSettingsManager As IAppSettingsManager, failureHandler As IFailureHandler, serviceDeploymentAppRunner As IServiceDeploymentAppRunner)
             _serviceProvider = serviceProvider
             _userPrompter = userPrompter
             _userInputReader = userInputReader
@@ -86,6 +103,7 @@
             _extractorService = extractorService
             _appSettingsManager = appSettingsManager
             _failureHandler = failureHandler
+            _serviceDeploymentAppRunner = serviceDeploymentAppRunner
         End Sub
 
         ''' <summary>
@@ -98,6 +116,7 @@
         ''' This method contains the main logic for running the application. It uses the <see cref="IAppDataManager"/> to create necessary directories,
         ''' retrieves the <see cref="IProgramPathValidator"/> to validate the program path, and displays the result to the user.
         ''' It is expected to be called at the application's entry point to start the execution process.
+        ''' The <see cref="IServiceDeploymentAppRunner"/> is used to handle service deployment tasks.
         ''' </remarks>
         ''' <see cref="IAppRunner.RunAsync"/> method for executing the application logic.
         Friend Async Function RunAsync() As Task Implements IAppRunner.RunAsync
@@ -105,6 +124,7 @@
             PromptUser(programPath)
             Await EnsureDirectoriesAndFilesExistAsync()
             Await WriteSettingsAsync()
+            Await ExecuteServiceDeploymentAsync()
             ReadUserInput()
         End Function
 
@@ -115,6 +135,7 @@
         Private Function GetValidProgramPath() As String
             Return _programPathValidator.GetValidProgramPath()
         End Function
+
         ''' <summary>
         ''' Prompts the user with the program path.
         ''' </summary>
@@ -133,7 +154,7 @@
         End Function
 
         ''' <summary>
-        ''' Asynchronously writes the application settings using the <see cref=".WriteSettings"/>.
+        ''' Asynchronously writes the application settings using the <see cref=".WriteSettings"/> method.
         ''' </summary>
         ''' <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         ''' <remarks>
@@ -150,6 +171,17 @@
             Catch ex As Exception
                 _failureHandler.HandleFailure("An error occurred while writing settings.")
             End Try
+        End Function
+
+        ''' <summary>
+        ''' Executes the service deployment process asynchronously.
+        ''' </summary>
+        ''' <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
+        Private Async Function ExecuteServiceDeploymentAsync() As Task
+            Dim deploySuccess = Await _serviceDeploymentAppRunner.RunAsync()
+            If Not deploySuccess Then
+                _failureHandler.HandleFailure("Service deployment failed.")
+            End If
         End Function
 
         ''' <summary>
