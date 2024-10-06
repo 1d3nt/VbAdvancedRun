@@ -51,61 +51,62 @@ All settings, including the process to be launched, are configured via `appsetti
 |   |   |   +-- IDirectoryManager.vb
 |   |   |-- AppDataManager.vb
 |   |   +-- DirectoryManager.vb
-|   |-- ProcessManagement
-|   |   +-- Interfaces
-|   +-- ServiceDeployment
-|       +-- VbWorkerServiceDeployer
-|           |-- ServiceDeployerApplication
-|           |   |-- Interfaces
-|           |   |   +-- IServiceDeploymentAppRunner.vb
-|           |   +-- ServiceDeploymentAppRunner.vb
-|           |-- ServiceDeployerCoreServices
-|           |   |-- ServiceManagement
-|           |   |   |-- Interfaces
-|           |   |   |   |-- IServiceControlManager.vb
-|           |   |   |   |-- IServiceCreator.vb
-|           |   |   |   |-- IServiceDeleter.vb
-|           |   |   |   |-- IServiceInstaller.vb
-|           |   |   |   |-- IServicePathProvider.vb
-|           |   |   |   |-- IServiceStarter.vb
-|           |   |   |   |-- IServiceStatusChecker.vb
-|           |   |   |   |-- IServiceStopper.vb
-|           |   |   |   +-- IServiceUninstaller.vb
-|           |   |   |-- ServiceControlManager.vb
-|           |   |   |-- ServiceCreator.vb
-|           |   |   |-- ServiceDeleter.vb
-|           |   |   |-- ServiceInstaller.vb
-|           |   |   |-- ServicePathProvider.vb
-|           |   |   |-- ServiceStarter.vb
-|           |   |   |-- ServiceStatusChecker.vb
-|           |   |   |-- ServiceStopper.vb
-|           |   |   +-- ServiceUninstaller.vb
-|           |   +-- WindowsApiInterop
-|           |       |-- Enums
-|           |       |   |-- DesiredAccess.vb
-|           |       |   |-- ServiceControlCodes.vb
-|           |       |   |-- ServiceErrorControlFlags.vb
-|           |       |   |-- ServiceManagerAccessFlags.vb
-|           |       |   |-- ServiceType.vb
-|           |       |   |-- StartType.vb
-|           |       |   +-- Win32ErrorCodes.vb
-|           |       |-- Methods
-|           |       |   |-- HandleManager.vb
-|           |       |   |-- MemoryManager.vb
-|           |       |   +-- NativeMethods.vb
-|           |       |-- Structs
-|           |       |   +-- ServiceStatus.vb
-|           |       +-- ExternDll.vb
-|           +-- ServiceDeployerUtilities
-|               |-- ServiceDeployerErrorHandling
-|               |   |-- Interfaces
-|               |   |   |-- IErrorHandlingService.vb
-|               |   |   |-- IWin32ErrorHelper.vb
-|               |   |   +-- IWin32ErrorUtility.vb
-|               |   |-- ErrorHandlingService.vb
-|               |   |-- Win32ErrorHelper.vb
-|               |   +-- Win32ErrorUtility.vb
-|               +-- AsynchronousProcessor.vb
+|   |-- ServiceDeployment
+|   |   +-- VbWorkerServiceDeployer
+|   |       |-- ServiceDeployerApplication
+|   |       |   |-- Interfaces
+|   |       |   |   +-- IServiceDeploymentAppRunner.vb
+|   |       |   +-- ServiceDeploymentAppRunner.vb
+|   |       |-- ServiceDeployerCoreServices
+|   |       |   |-- ServiceManagement
+|   |       |   |   |-- Interfaces
+|   |       |   |   |   |-- IServiceControlManager.vb
+|   |       |   |   |   |-- IServiceCreator.vb
+|   |       |   |   |   |-- IServiceDeleter.vb
+|   |       |   |   |   |-- IServiceInstaller.vb
+|   |       |   |   |   |-- IServicePathProvider.vb
+|   |       |   |   |   |-- IServiceStarter.vb
+|   |       |   |   |   |-- IServiceStatusChecker.vb
+|   |       |   |   |   |-- IServiceStopper.vb
+|   |       |   |   |   +-- IServiceUninstaller.vb
+|   |       |   |   |-- ServiceControlManager.vb
+|   |       |   |   |-- ServiceCreator.vb
+|   |       |   |   |-- ServiceDeleter.vb
+|   |       |   |   |-- ServiceInstaller.vb
+|   |       |   |   |-- ServicePathProvider.vb
+|   |       |   |   |-- ServiceStarter.vb
+|   |       |   |   |-- ServiceStatusChecker.vb
+|   |       |   |   |-- ServiceStopper.vb
+|   |       |   |   +-- ServiceUninstaller.vb
+|   |       |   +-- WindowsApiInterop
+|   |       |       |-- Enums
+|   |       |       |   |-- DesiredAccess.vb
+|   |       |       |   |-- ServiceControlCodes.vb
+|   |       |       |   |-- ServiceErrorControlFlags.vb
+|   |       |       |   |-- ServiceManagerAccessFlags.vb
+|   |       |       |   |-- ServiceType.vb
+|   |       |       |   |-- StartType.vb
+|   |       |       |   +-- Win32ErrorCodes.vb
+|   |       |       |-- Methods
+|   |       |       |   |-- HandleManager.vb
+|   |       |       |   |-- MemoryManager.vb
+|   |       |       |   +-- NativeMethods.vb
+|   |       |       |-- Structs
+|   |       |       |   +-- ServiceStatus.vb
+|   |       |       +-- ExternDll.vb
+|   |       +-- ServiceDeployerUtilities
+|   |           |-- ServiceDeployerErrorHandling
+|   |           |   |-- Interfaces
+|   |           |   |   |-- IErrorHandlingService.vb
+|   |           |   |   |-- IWin32ErrorHelper.vb
+|   |           |   |   +-- IWin32ErrorUtility.vb
+|   |           |   |-- ErrorHandlingService.vb
+|   |           |   |-- Win32ErrorHelper.vb
+|   |           |   +-- Win32ErrorUtility.vb
+|   |           +-- AsynchronousProcessor.vb
+|   +-- WindowsApiInterop
+|       |-- Enums
+|       +-- Methods
 |-- My Project
 |   +-- Resources.Designer.vb
 |-- Resources
