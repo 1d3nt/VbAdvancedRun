@@ -29,7 +29,7 @@ All settings, including the process to be launched, are configured via `appsetti
 
 # Directory Structure
 
-```
+```bash
 |-- Application
 |   |-- Interfaces
 |   |   |-- IAppRunner.vb
